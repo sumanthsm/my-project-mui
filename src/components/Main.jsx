@@ -24,6 +24,7 @@ import Zoom from '@material-ui/core/Zoom';
 import Dashboard from './Dashboard';
 import AddNewApp from './AddNewApp';
 import EditApp from './EditApp';
+import TableView from './TableView';
 
 const styles = theme => ({
     root: {
@@ -120,7 +121,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         backgroundColor: '#66c2ff',
-        overflow: 'hidden'
+        height: '100%'
     },
     fab: {
         position: 'absolute',
@@ -143,6 +144,7 @@ class Main extends React.Component {
             typingTimeout: 0,
             isAddApp: false,
             isEditApp: false,
+            isTableView: false,
             appId: null
         }
     }
@@ -165,7 +167,7 @@ class Main extends React.Component {
 
     getShortcutsData = () => {
         console.log("getShortcutsData");
-        
+
         axios.get('http://localhost:5000/api/shortcutsdata')
             .then((response) => {
                 let data = response.data;
@@ -217,7 +219,7 @@ class Main extends React.Component {
                     //     showConfirmButton: false,
                     //     timer: 1500
                     // })
-                } 
+                }
                 // else {
                 //     Swal.fire({
                 //         type: 'error',
@@ -233,29 +235,38 @@ class Main extends React.Component {
 
     onAddButtonClick = () => {
         this.setState(({ isAddApp: true, isEditApp: false }));
-      };
+    };
 
     onEditClick = (appId) => {
         console.log(appId, "appId");
         this.setState({
-            appId : appId,
-            isEditApp : true,
-            isAddApp : false
+            appId: appId,
+            isEditApp: true,
+            isAddApp: false
         })
     }
 
     onHomeButtonClick = () => {
         this.getAppData();
         this.setState({
-            appId : null,
-            isEditApp : false,
-            isAddApp : false
+            appId: null,
+            isEditApp: false,
+            isAddApp: false,
+            isTableView: false,
+        })
+    }
+
+    onTableViewButtonClick = () => {
+        this.setState({
+            isTableView: true,
+            isEditApp: false,
+            isAddApp: false
         })
     }
 
     render() {
         const { classes } = this.props;
-        const { isAddApp, isEditApp, appId, shortcutsData } = this.state;
+        const { isAddApp, isEditApp, isTableView, appId, shortcutsData } = this.state;
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -319,7 +330,7 @@ class Main extends React.Component {
                     <List>
                         <ListItem button >
                             <ListItemIcon>
-                                <HomeIcon style={{ color: 'white' }} onClick={this.onHomeButtonClick}/>
+                                <HomeIcon style={{ color: 'white' }} onClick={this.onHomeButtonClick} />
                             </ListItemIcon>
                         </ListItem>
                     </List>
@@ -330,9 +341,9 @@ class Main extends React.Component {
                                 return (
                                     <ListItem button key={i}>
                                         <ListItemText style={{ color: 'white' }}>
-                                        <a href={shortcut.appUrl} target="blank" style={{textDecoration: 'none', color: 'white'}}>
-                                            {shortcut.appAbrv}
-                                        </a>
+                                            <a href={shortcut.appUrl} target="_blank" style={{ textDecoration: 'none', color: 'white' }}>
+                                                {shortcut.appAbrv}
+                                            </a>
                                         </ListItemText>
                                     </ListItem>
                                 )
@@ -344,19 +355,27 @@ class Main extends React.Component {
                     <div className={classes.toolbar} />
                     <div style={{ marginTop: '60px' }}>
                         <Fab size="small" className={classes.fab} color="primary">
-                            <AddIcon onClick={this.onAddButtonClick}/>
+                            <AddIcon onClick={this.onAddButtonClick} />
                         </Fab>
                     </div>
                     {
-                        isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onButtonClick={this.onHomeButtonClick}/>
+                        isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onButtonClick={this.onHomeButtonClick} />
                     }
 
                     {
-                        isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick}/>
+                        isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick} />
                     }
                     <Divider />
+
                     <Zoom in={true}>
-                    <Dashboard appData={this.state.appData} shortcutsData={this.getShortcutsData} onEditClick={this.onEditClick}/>
+                        {
+                            isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick}/> : <Dashboard
+                                appData={this.state.appData}
+                                shortcutsData={this.getShortcutsData}
+                                onEditClick={this.onEditClick}
+                                onTableViewButtonClick={this.onTableViewButtonClick} />
+                        }
+
                     </Zoom>
                 </main>
             </div>

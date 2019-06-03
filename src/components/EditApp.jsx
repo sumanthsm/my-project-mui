@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Zoom from '@material-ui/core/Zoom';
+import Slide from '@material-ui/core/Slide';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
@@ -138,13 +138,17 @@ class EditApp extends React.Component {
         }, 2000);
     }
 
+    onCancelButtonClick = () => {
+        this.props.onButtonClick();
+    }
+
     render() {
         const { classes, isEditApp } = this.props;
         const { appId, appName, appAbrv, appUrl, appDesc} = this.state;
         return (
             <div style={{ marginTop: '-40px' }}>
                 <h3 style={{ marginLeft: '50px' }}>Edit Application</h3>
-                <Zoom in={isEditApp}>
+                <Slide direction="down" in={isEditApp} mountOnEnter unmountOnExit>
                     <div style={{ display: 'flex' }}>
                         <Paper elevation={4} style={{ width: '100%', margin: '0px 70px 30px 50px' }}>
                             <form className={classes.container} noValidate autoComplete="off">
@@ -284,7 +288,7 @@ class EditApp extends React.Component {
                                 </div>
                                 <div style={{ width: '100%' }}>
                                     <div style={{margin: '10px 30px 30px 30px', float: 'right'}}>
-                                        <Button variant="outlined">
+                                        <Button variant="outlined" onClick={this.onCancelButtonClick}>
                                         <span style={{padding: '0 15px'}}>CANCEL</span>    
                                         </Button>
                                         <Button 
@@ -299,7 +303,7 @@ class EditApp extends React.Component {
                             </form>
                         </Paper>
                     </div>
-                </Zoom>
+                </Slide>
             </div>
         );
     }

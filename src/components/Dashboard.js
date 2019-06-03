@@ -70,6 +70,10 @@ class Dashboard extends React.Component {
     }, 2000);
     }
 
+    onTableViewClick = () => {
+      this.props.onTableViewButtonClick();
+    }
+
     render(){
         const { classes } = this.props;
         return (
@@ -86,8 +90,8 @@ class Dashboard extends React.Component {
                         <p>{app.appName}</p>
                         <div style={{ display: 'inline' }}>
                             <EditIcon style={{ padding: '5px 0px', cursor: 'pointer' }} onClick={() =>this.handleEditApp(app.appId)}/>
-                            <TableChartIcon style={{ padding: '5px 0px', cursor: 'pointer' }} />
-                            <a href={app.appUrl} target="blank" style={{color: 'black', textDecoration: 'none'}}>
+                            <TableChartIcon style={{ padding: '5px 0px', cursor: 'pointer' }} onClick={this.onTableViewClick}/>
+                            <a href={app.appUrl} target="_blank" style={{color: 'black', textDecoration: 'none'}}>
                               <LaunchIcon style={{ padding: '5px 0px' }} />
                             </a>
                         </div>
