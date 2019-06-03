@@ -120,10 +120,13 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        backgroundColor: '#66c2ff',
-        height: '100%'
+        backgroundImage: 'linear-gradient(#b3e0ff, #004d80)',
+        height: '100%',
+        minHeight: '-webkit-fill-available',
     },
     fab: {
+        backgroundColor: 'white',
+        color: 'black',
         position: 'absolute',
         top: '75px',
         right: theme.spacing(2),
@@ -137,10 +140,6 @@ class Main extends React.Component {
             searchTerm: '',
             appData: [],
             shortcutsData: [],
-            containerMargin: '80px',
-            navWidth: '80px',
-            navMarginLeft: '0px',
-            isMenuExpanded: false,
             typingTimeout: 0,
             isAddApp: false,
             isEditApp: false,
@@ -353,7 +352,7 @@ class Main extends React.Component {
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-                    <div style={{ marginTop: '60px' }}>
+                    <div style={{ marginTop: '60px', borderBottom: '2px solid white' }}>
                         <Fab size="small" className={classes.fab} color="primary">
                             <AddIcon onClick={this.onAddButtonClick} />
                         </Fab>
@@ -365,7 +364,6 @@ class Main extends React.Component {
                     {
                         isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick} />
                     }
-                    <Divider />
 
                     <Zoom in={true}>
                         {

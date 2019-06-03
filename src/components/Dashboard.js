@@ -18,6 +18,7 @@ const styles = theme => ({
       height: 200,
       width: 200,
       borderRadius: '50%',
+      backgroundImage: 'radial-gradient(circle, white, #4ddbff, #00ccff)',
     },
     toolbar: {
         display: 'flex',
@@ -79,24 +80,24 @@ class Dashboard extends React.Component {
         return (
             <div>
                 <div className={classes.toolbar} />
-        <Grid container className={classes.root} spacing={2}>
+        <Grid container className={classes.root} style={{margin: '0px 0px 30px 0px', overflow: 'hidden'}}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={10}>
+          <Grid container justify="center" spacing={10} style={{marginBottom: '10px'}}>
             {this.props.appData.map((app, i) => (
               <Grid key={i} item>
                 <Paper elevation={4} className={classes.paper} >
                     <div style={{display: 'block', paddingTop: '20px', textAlign: 'center'}}>
-                        <h1 >{app.appAbrv}</h1>
+                        <h2 style={{color: 'white'}}>{app.appAbrv}</h2>
                         <p>{app.appName}</p>
-                        <div style={{ display: 'inline' }}>
+                        <div style={{ display: 'inline', color: 'white' }}>
                             <EditIcon style={{ padding: '5px 0px', cursor: 'pointer' }} onClick={() =>this.handleEditApp(app.appId)}/>
                             <TableChartIcon style={{ padding: '5px 0px', cursor: 'pointer' }} onClick={this.onTableViewClick}/>
-                            <a href={app.appUrl} target="_blank" style={{color: 'black', textDecoration: 'none'}}>
+                            <a href={app.appUrl} target="_blank" style={{color: 'white', textDecoration: 'none'}}>
                               <LaunchIcon style={{ padding: '5px 0px' }} />
                             </a>
                         </div>
                         <div>
-                        <FavoriteIcon style={{ cursor: 'pointer' }} onClick={() => this.onFavButtonClick(app.appId)}/>
+                        <FavoriteIcon style={{color: 'white', cursor: 'pointer' }} onClick={() => this.onFavButtonClick(app.appId)}/>
                         </div>
                     </div>
                 </Paper>

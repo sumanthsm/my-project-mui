@@ -150,7 +150,7 @@ class EditApp extends React.Component {
                 <h3 style={{ marginLeft: '50px' }}>Edit Application</h3>
                 <Slide direction="down" in={isEditApp} mountOnEnter unmountOnExit>
                     <div style={{ display: 'flex' }}>
-                        <Paper elevation={4} style={{ width: '100%', margin: '0px 70px 30px 50px' }}>
+                        <Paper elevation={4} style={{ width: '100%', margin: '0px 50px 30px 50px' }}>
                             <form className={classes.container} noValidate autoComplete="off">
                                 <div style={{ display: 'flex' }}>
                                     <div style={{margin: '20px 30px'}}>
