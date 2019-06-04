@@ -119,7 +119,7 @@ class AddNewApp extends React.Component {
     }
 
     onCancelButtonClick = () => {
-        this.props.onButtonClick();
+        this.props.onCalcelButtonClick();
     }
 
     render() {

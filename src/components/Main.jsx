@@ -26,6 +26,7 @@ import AddNewApp from './AddNewApp';
 import EditApp from './EditApp';
 import TableView from './TableView';
 import Login from './Login';
+import ImageLogo from '../logo.jpg';
 
 const styles = theme => ({
     root: {
@@ -179,7 +180,7 @@ class Main extends React.Component {
             });
     }
 
-    onChange = (e) => {
+    handleChange = (e) => {
         if (this.state.typingTimeout) {
             clearTimeout(this.state.typingTimeout);
         }
@@ -257,6 +258,14 @@ class Main extends React.Component {
         })
     }
 
+    onCalcelButtonClick = () => {
+        this.setState({
+            appId: null,
+            isEditApp: false,
+            isAddApp: false,
+        })
+    }
+
     onTableViewButtonClick = () => {
         this.setState({
             isTableView: true,
@@ -271,7 +280,7 @@ class Main extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { isAddApp, isEditApp, isTableView, appId, shortcutsData } = this.state;
+        const { isAddApp, isEditApp, isTableView, appId, shortcutsData, searchTerm } = this.state;
         const isLogin = localStorage.getItem('login');
         const fullName = localStorage.getItem('fullName');
         return (
@@ -281,9 +290,14 @@ class Main extends React.Component {
                     className={classes.appBar}
                     style={{ backgroundColor: 'white' }}>
                     <Toolbar>
-                        <Typography className={classes.title} variant="h6" noWrap>
-                            Enterprise App Launchpad
-                    </Typography>
+                            <Typography 
+                                className={classes.title} 
+                                variant="h6" 
+                                onClick={this.onHomeButtonClick}
+                                style={{cursor: 'pointer'}}
+                                noWrap>
+                                Enterprise App Launchpad
+                            </Typography>
                         <div className={classes.grow} />
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
@@ -292,6 +306,8 @@ class Main extends React.Component {
                             <InputBase
                                 placeholder="Search…"
                                 variant="outlined"
+                                value={searchTerm}
+                                onChange={this.handleChange}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
@@ -333,8 +349,8 @@ class Main extends React.Component {
                     }}
                     anchor="left"
                 >
-                    <div className={classes.toolbar}>
-
+                    <div onClick={this.onHomeButtonClick} style={{cursor: 'pointer'}}>
+                    <img src={ImageLogo} style={{width: '64px', height: '64px'}}alt="logo"></img>
                     </div>
                     <Divider />
                     <List>
@@ -365,28 +381,30 @@ class Main extends React.Component {
                     <div className={classes.toolbar} />
                     {isLogin ?
                         <div>
-                            <div style={{ marginTop: '60px', borderBottom: '2px solid white' }}>
+                            <div style={{ marginTop: '60px' }}>
                                 <Fab size="small" className={classes.fab} color="primary">
                                     <AddIcon onClick={this.onAddButtonClick} />
                                 </Fab>
                             </div>
                             {
-                                isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onButtonClick={this.onHomeButtonClick} />
+                                isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onCalcelButtonClick={this.onCalcelButtonClick} />
                             }
 
                             {
-                                isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick} />
+                                isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onCalcelButtonClick={this.onCalcelButtonClick} />
                             }
-
+                            <div style={{ borderTop: '1px solid white'}}>
                             <Zoom in={true}>
                                 {
                                     isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick} /> : <Dashboard
+                                        appId={appId}
                                         appData={this.state.appData}
                                         shortcutsData={this.getShortcutsData}
                                         onEditClick={this.onEditClick}
                                         onTableViewButtonClick={this.onTableViewButtonClick} />
                                 }
                             </Zoom>
+                            </div>
                         </div> : <Login onLogin={this.onLogin}/>
                     }
                 </main>

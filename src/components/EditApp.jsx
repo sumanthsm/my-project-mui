@@ -139,7 +139,7 @@ class EditApp extends React.Component {
     }
 
     onCancelButtonClick = () => {
-        this.props.onButtonClick();
+        this.props.onCalcelButtonClick();
     }
 
     render() {

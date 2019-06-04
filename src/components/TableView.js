@@ -34,7 +34,7 @@ const StyledTableCell = withStyles(theme => ({
 const styles = theme => ({
     root: {
         width: '100%',
-        margin: '20px 50px',
+        margin: '5px 50px',
         overflow: 'auto',
       },
       table: {
@@ -81,14 +81,38 @@ class TableView extends React.Component {
         console.log("handleEditApp");
         window.scrollTo(0,0);
         this.props.onEditClick(appId);
-      }
+    }
+
+    handleDeleteApp = (appId) => {
+        axios.post('http://localhost:5000/api/deleteapp', { appId: appId })
+            .then((response) => {
+                if (response.data.status === 'success') {
+                    this.getAppData();
+                    Swal.fire({
+                        type: 'success',
+                        title: 'App Deleted Successfully.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'App not deleted',
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
     
     render() {
         const { classes, isTableView } = this.props;
         const { appData } = this.state;
         return (
             <div>
-                <h3 style={{ marginLeft: '50px' }}>My Apps</h3>
+                <h3 style={{ marginLeft: '50px', color: 'white' }}>My Apps</h3>
                 <Zoom in={isTableView}>
                     <div style={{ display: 'flex' }}>
                         <Paper className={classes.root}>
