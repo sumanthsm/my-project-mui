@@ -25,6 +25,7 @@ import Dashboard from './Dashboard';
 import AddNewApp from './AddNewApp';
 import EditApp from './EditApp';
 import TableView from './TableView';
+import Login from './Login';
 
 const styles = theme => ({
     root: {
@@ -144,6 +145,7 @@ class Main extends React.Component {
             isAddApp: false,
             isEditApp: false,
             isTableView: false,
+            isLogin: localStorage.getItem('login') || false,
             appId: null
         }
     }
@@ -263,9 +265,15 @@ class Main extends React.Component {
         })
     }
 
+    onLogin = () => {
+        this.setState({isLogin: true});
+    }
+
     render() {
         const { classes } = this.props;
         const { isAddApp, isEditApp, isTableView, appId, shortcutsData } = this.state;
+        const isLogin = localStorage.getItem('login');
+        const fullName = localStorage.getItem('fullName');
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -309,7 +317,10 @@ class Main extends React.Component {
                                 </IconButton>
                             </div>
                             <Typography style={{ color: 'black', display: 'flex', alignItems: 'center', justifyContent: 'center' }} variant="span" noWrap>
-                                Hello, User
+                                <span>Hello,</span>
+                                {
+                                    isLogin ? <span>{fullName}</span> : <span>User</span>
+                                }
                         </Typography>
                         </div>
                     </Toolbar>
@@ -352,29 +363,32 @@ class Main extends React.Component {
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-                    <div style={{ marginTop: '60px', borderBottom: '2px solid white' }}>
-                        <Fab size="small" className={classes.fab} color="primary">
-                            <AddIcon onClick={this.onAddButtonClick} />
-                        </Fab>
-                    </div>
-                    {
-                        isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onButtonClick={this.onHomeButtonClick} />
+                    {isLogin ?
+                        <div>
+                            <div style={{ marginTop: '60px', borderBottom: '2px solid white' }}>
+                                <Fab size="small" className={classes.fab} color="primary">
+                                    <AddIcon onClick={this.onAddButtonClick} />
+                                </Fab>
+                            </div>
+                            {
+                                isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onButtonClick={this.onHomeButtonClick} />
+                            }
+
+                            {
+                                isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick} />
+                            }
+
+                            <Zoom in={true}>
+                                {
+                                    isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick} /> : <Dashboard
+                                        appData={this.state.appData}
+                                        shortcutsData={this.getShortcutsData}
+                                        onEditClick={this.onEditClick}
+                                        onTableViewButtonClick={this.onTableViewButtonClick} />
+                                }
+                            </Zoom>
+                        </div> : <Login onLogin={this.onLogin}/>
                     }
-
-                    {
-                        isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onButtonClick={this.onHomeButtonClick} />
-                    }
-
-                    <Zoom in={true}>
-                        {
-                            isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick}/> : <Dashboard
-                                appData={this.state.appData}
-                                shortcutsData={this.getShortcutsData}
-                                onEditClick={this.onEditClick}
-                                onTableViewButtonClick={this.onTableViewButtonClick} />
-                        }
-
-                    </Zoom>
                 </main>
             </div>
         );

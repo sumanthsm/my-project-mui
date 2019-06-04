@@ -125,6 +125,8 @@ class AddNewApp extends React.Component {
     render() {
         const { classes, isAddApp } = this.props;
         const { appId, appName, appAbrv, appUrl, appDesc} = this.state;
+        const racf = localStorage.getItem('racf');
+        const fullName = localStorage.getItem('fullName');
         return (
             <div style={{ marginTop: '-40px' }}>
                 <h3 style={{ marginLeft: '50px' }}>App Application</h3>
@@ -139,12 +141,13 @@ class AddNewApp extends React.Component {
                                         </div>
                                         <InputBase
                                             id="racf"
-                                            defaultValue=""
+                                            value={racf}
                                             variant="outlined"
                                             className={classes.inputBase}
                                             style={{
                                                 width: '250px'
                                             }}
+                                            disabled
                                         />
                                     </div>
                                     <div style={{margin: '20px 30px'}}>
@@ -153,12 +156,13 @@ class AddNewApp extends React.Component {
                                         </div>
                                         <InputBase
                                             id="fullName"
-                                            defaultValue=""
+                                            value={fullName}
                                             variant="outlined"
                                             className={classes.inputBase}
                                             style={{
                                                 width: '250px'
                                             }}
+                                            disabled
                                         />
                                     </div>
                                     <div style={{margin: '20px 30px'}}>

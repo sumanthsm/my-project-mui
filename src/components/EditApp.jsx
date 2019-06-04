@@ -145,6 +145,8 @@ class EditApp extends React.Component {
     render() {
         const { classes, isEditApp } = this.props;
         const { appId, appName, appAbrv, appUrl, appDesc} = this.state;
+        const racf = localStorage.getItem('racf');
+        const fullName = localStorage.getItem('fullName');
         return (
             <div style={{ marginTop: '-40px' }}>
                 <h3 style={{ marginLeft: '50px' }}>Edit Application</h3>
@@ -159,7 +161,7 @@ class EditApp extends React.Component {
                                         </div>
                                         <InputBase
                                             id="racf"
-                                            value=""
+                                            value={racf}
                                             variant="outlined"
                                             style={{
                                                 backgroundColor: 'lightgrey',
@@ -169,6 +171,7 @@ class EditApp extends React.Component {
                                                 padding: '0 10px'
 
                                             }}
+                                            disabled
                                             onChange={this.handleChange}
                                         />
                                     </div>
@@ -178,7 +181,7 @@ class EditApp extends React.Component {
                                         </div>
                                         <InputBase
                                             id="fullName"
-                                            value=""
+                                            value={fullName}
                                             variant="outlined"
                                             style={{
                                                 backgroundColor: 'lightgrey',
@@ -187,6 +190,7 @@ class EditApp extends React.Component {
                                                 alignItems: 'left',
                                                 padding: '0 10px'
                                             }}
+                                            disabled
                                             onChange={this.handleChange}
                                         />
                                     </div>
