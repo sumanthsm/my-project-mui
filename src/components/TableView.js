@@ -108,7 +108,7 @@ class TableView extends React.Component {
     }
     
     render() {
-        const { classes, isTableView } = this.props;
+        const { classes, isTableView, isLogin } = this.props;
         const { appData } = this.state;
         return (
             <div>
@@ -124,7 +124,7 @@ class TableView extends React.Component {
                                         <StyledTableCell style={{width: '20%'}}>NAME</StyledTableCell>
                                         <StyledTableCell style={{width: '25%'}}>URL</StyledTableCell>
                                         <StyledTableCell style={{width: '25%'}}>DESCRIPTION</StyledTableCell>
-                                        <StyledTableCell align="right">ACTIONS</StyledTableCell>
+                                        {isLogin && <StyledTableCell align="right">ACTIONS</StyledTableCell>}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody style={{fontSize : '12px'}}>
@@ -137,14 +137,17 @@ class TableView extends React.Component {
                                             </StyledTableCell>
                                             <StyledTableCell style={{width: '8%'}}>{app.appAbrv}</StyledTableCell>
                                             <StyledTableCell style={{width: '20%'}}>{app.appName}</StyledTableCell>
-                                            <StyledTableCell style={{width: '25%'}}>{app.appUrl}</StyledTableCell>
+                                            <StyledTableCell style={{width: '25%'}}>
+                                                <a href={app.appUrl} style={{textDecoration : 'none', color: '#33adff'}} target="_blank">{app.appUrl}</a>
+                                            </StyledTableCell>
                                             <StyledTableCell style={{width: '25%'}}>{app.appDesc}</StyledTableCell>
-                                            <StyledTableCell align="right">
+                                            {isLogin && <StyledTableCell align="right">
                                                 <div style={{display: 'inline'}}>
                                                     <EditIcon style={{ padding: '5px 0px', cursor: 'pointer' }} onClick={() =>this.handleEditApp(app.appId)}/>
                                                     <ClearIcon style={{ padding: '5px 0px', cursor: 'pointer', color: '#e6005c' }} onClick={() =>this.handleDeleteApp(app.appId)}/>
                                                 </div>
                                             </StyledTableCell>
+                                            }
                                         </StyledTableRow>
                                             )
                                         })

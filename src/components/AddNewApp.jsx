@@ -55,6 +55,7 @@ class AddNewApp extends React.Component {
             appName: '',
             appDesc: '',
             appUrl: '',
+            appContactEmail: ''
         }
     }
 
@@ -69,6 +70,8 @@ class AddNewApp extends React.Component {
             this.setState({ appDesc: e.target.value });
         } else if (e.target.id === 'appUrl') {
             this.setState({ appUrl: e.target.value });
+        } else if (e.target.id === 'appContactEmail') {
+            this.setState({ appContactEmail: e.target.value });
         }
     }
 
@@ -90,6 +93,7 @@ class AddNewApp extends React.Component {
                         appName: '',
                         appDesc: '',
                         appUrl: '',
+                        appContactEmail: ''
                     })
                 } else if (response.data.status === 'fail') {
                     Swal.fire({
@@ -111,6 +115,7 @@ class AddNewApp extends React.Component {
         appObj['appName'] = this.state.appName;
         appObj['appDesc'] = this.state.appDesc;
         appObj['appUrl'] = this.state.appUrl;
+        appObj['appContactEmail'] = this.state.appContactEmail;
         
         this.setAppData(appObj);
         setTimeout(() => {
@@ -124,7 +129,7 @@ class AddNewApp extends React.Component {
 
     render() {
         const { classes, isAddApp } = this.props;
-        const { appId, appName, appAbrv, appUrl, appDesc} = this.state;
+        const { appId, appName, appAbrv, appUrl, appDesc, appContactEmail} = this.state;
         const racf = localStorage.getItem('racf');
         const fullName = localStorage.getItem('fullName');
         return (
@@ -231,8 +236,8 @@ class AddNewApp extends React.Component {
                                         />
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div style={{margin: '20px 30px', width: '100%'}}>
+                                <div style={{ display: 'flex'}}>
+                                    <div style={{margin: '20px 30px'}}>
                                         <div>
                                             <label htmlFor="appDesc" style={{ textAlign: 'left' }}>App Description</label>
                                         </div>
@@ -242,12 +247,31 @@ class AddNewApp extends React.Component {
                                             variant="outlined"
                                             className={classes.inputBase}
                                             onChange={this.handleChange}
-                                            fullWidth={true}
+                                            style={{width: '750px'}}
+                                        />
+                                    </div>
+                                    <div style={{margin: '20px 30px'}}>
+                                        <div>
+                                            <label htmlFor="appContactEmail" style={{ textAlign: 'left' }}>App Contact Email</label>
+                                        </div>
+                                        <InputBase
+                                            id="appContactEmail"
+                                            value={appContactEmail}
+                                            variant="outlined"
+                                            style={{
+                                                backgroundColor: 'lightgrey',
+                                                borderRadius: '5px',
+                                                width: '310px',
+                                                alignItems: 'left',
+                                                padding: '0 10px'
+                                            }}
+                                            disabled
+                                            onChange={this.handleChange}
                                         />
                                     </div>
                                 </div>
                                 <div style={{ width: '100%' }}>
-                                    <div style={{margin: '10px 30px 30px 30px', float: 'right'}}>
+                                    <div style={{margin: '10px 30px 30px 0px', float: 'right'}}>
                                         <Button variant="outlined" onClick={this.onCancelButtonClick}>
                                         <span style={{padding: '0 15px'}}>CANCEL</span>    
                                         </Button>

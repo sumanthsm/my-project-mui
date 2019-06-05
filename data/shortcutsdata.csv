@@ -1,4 +1,3 @@
-"appId","appAbrv","appName","appDesc","appUrl"
-"1","EXD","APP 1","APP Description","APP Url"
-"2","EED","APP 2","APP Description","APP Url"
-"12","MED","My Ex Dashboard","app desc","app url"
+"appId","appAbrv","appName","appDesc","appUrl","appContactEmail"
+"1","EXD","APP 1","APP Description","APP Url", "abc@gmail.com"
+"2","EED","APP 2","APP Description","APP Url", "abc@gmail.com"

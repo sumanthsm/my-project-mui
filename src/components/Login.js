@@ -61,18 +61,24 @@ class EditApp extends React.Component {
 
     handleSubmmit = () => {
         const { racf, fullName } = this.state;
-        if(racf !== '' || fullName !== ''){
+        if(racf !== '' && fullName !== ''){
             localStorage.setItem('racf', racf);
             localStorage.setItem('fullName', fullName);
             localStorage.setItem('login', true);
             this.props.onLogin();
+            Swal.fire({
+                type: 'success',
+                title: 'Login Successful!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }else {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Please enter RACF and Full Name',
+            })
         }
-        Swal.fire({
-            type: 'success',
-            title: 'Login Successful!',
-            showConfirmButton: false,
-            timer: 1500
-        });
     }
 
     onCancelButtonClick = () => {
@@ -86,7 +92,7 @@ class EditApp extends React.Component {
             <div style={{ marginTop: '30px' }}>
                 <h2 style={{ marginLeft: '50px', color: 'white' }}>Launchpad Login</h2>
                     <div style={{ display: 'flex' }}>
-                        <Paper elevation={4} style={{ width: '21%', margin: '0 auto' }}>
+                        <Paper elevation={4} style={{ width: '310px', margin: '0 auto' }}>
                             <form className={classes.container} noValidate autoComplete="off">
                                 <div style={{ display: 'inline' }}>
                                     <div style={{margin: '20px 30px'}}>

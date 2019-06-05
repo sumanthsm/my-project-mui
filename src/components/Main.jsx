@@ -19,6 +19,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
 import MailIcon from '@material-ui/icons/Mail';
+import Tooltip from '@material-ui/core/Tooltip';
+import ErrorIcon from '@material-ui/icons/Error';
 import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -136,16 +138,9 @@ const styles = theme => ({
         right: theme.spacing(2),
     },
     contactUsButton: {
-        display: 'inline-flex',
-        position: 'fixed',
         textDecoration: 'none',
-        right: '-45px',
-        transform: 'rotate(270deg)',
-        top: '30%',
-        padding: '3px 10px 5px',
-        color: 'rgb(68, 68, 68)',
-        border: '1px solid black',
-        borderRadius: '10px 10px 0px 0px',
+        color: 'black',
+        margin: '8px auto'
     }
 });
 
@@ -161,6 +156,7 @@ class Main extends React.Component {
             isEditApp: false,
             isTableView: false,
             isLogin: localStorage.getItem('login') || false,
+            isGuestUser: false,
             appId: null
         }
     }
@@ -224,7 +220,7 @@ class Main extends React.Component {
 
     handleShortcutDelete = (appId) => {
         console.log("handleShortcutDelete");
-        
+
         axios.post('http://localhost:5000/api/deleteshortcut', { appId: appId })
             .then((response) => {
                 if (response.data.status === 'success') {
@@ -262,6 +258,7 @@ class Main extends React.Component {
             isEditApp: false,
             isAddApp: false,
             isTableView: false,
+            isGuestUser: true
         })
     }
 
@@ -282,12 +279,12 @@ class Main extends React.Component {
     }
 
     onLogin = () => {
-        this.setState({isLogin: true});
+        this.setState({ isLogin: true });
     }
 
     render() {
         const { classes } = this.props;
-        const { isAddApp, isEditApp, isTableView, appId, shortcutsData, searchTerm } = this.state;
+        const { isAddApp, isEditApp, isTableView, appId, shortcutsData, searchTerm, isGuestUser } = this.state;
         const isLogin = localStorage.getItem('login');
         const fullName = localStorage.getItem('fullName');
         return (
@@ -297,13 +294,13 @@ class Main extends React.Component {
                     className={classes.appBar}
                     style={{ backgroundColor: 'white' }}>
                     <Toolbar>
-                            <Typography 
-                                className={classes.title} 
-                                variant="h6" 
-                                onClick={this.onHomeButtonClick}
-                                style={{cursor: 'pointer'}}
-                                noWrap>
-                                Enterprise App Launchpad
+                        <Typography
+                            className={classes.title}
+                            variant="h6"
+                            onClick={this.onHomeButtonClick}
+                            style={{ cursor: 'pointer' }}
+                            noWrap>
+                            Enterprise App Launchpad
                             </Typography>
                         <div className={classes.grow} />
                         <div className={classes.search}>
@@ -344,7 +341,7 @@ class Main extends React.Component {
                                 {
                                     isLogin ? <span>{fullName}</span> : <span>User</span>
                                 }
-                        </Typography>
+                            </Typography>
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -356,8 +353,8 @@ class Main extends React.Component {
                     }}
                     anchor="left"
                 >
-                    <div onClick={this.onHomeButtonClick} style={{cursor: 'pointer'}}>
-                    <img src={ImageLogo} style={{width: '64px', height: '64px'}}alt="logo"></img>
+                    <div onClick={this.onHomeButtonClick} style={{ cursor: 'pointer' }}>
+                        <img src={ImageLogo} style={{ width: '64px', height: '64px' }} alt="logo"></img>
                     </div>
                     <Divider />
                     <List>
@@ -368,35 +365,40 @@ class Main extends React.Component {
                         </ListItem>
                     </List>
                     <Divider />
-                    <List>
-                        {
-                            shortcutsData && shortcutsData.map((shortcut, i) => {
-                                return (
-                                    <ListItem button key={i}>
-                                        <ListItemText style={{ color: 'white' }}>
-                                            <a href={shortcut.appUrl} target="_blank" style={{ textDecoration: 'none', color: 'white' }}>
-                                                {shortcut.appAbrv}
-                                            </a>
-                                        </ListItemText>
-                                    </ListItem>
-                                )
-                            })
-                        }
-                    </List>
+                    {
+                        isLogin && <List>
+                            {
+                                shortcutsData && shortcutsData.map((shortcut, i) => {
+                                    return (
+                                        <ListItem button key={i}>
+                                            <ListItemText style={{ color: 'white' }}>
+                                                <a href={shortcut.appUrl} target="_blank" style={{ textDecoration: 'none', color: 'white' }}>
+                                                    {shortcut.appAbrv}
+                                                </a>
+                                            </ListItemText>
+                                        </ListItem>
+                                    )
+                                })
+                            }
+                        </List>
+                    }
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-                    {isLogin ?
+                    {isLogin || isGuestUser ?
                         <div>
-                            <div style={{ marginTop: '60px' }}>
+                            {isLogin && <div style={{ marginTop: '60px' }}>
                                 <Fab size="small" className={classes.fab} color="primary">
                                     <AddIcon onClick={this.onAddButtonClick} />
                                 </Fab>
+                            </div>}
+                            <div>
+                                <Tooltip title="Contact us" placement="left">
+                                    <Fab size="small" className={classes.fab} style={{ top: '150px', right: '0px', borderRadius: '20%' }}>
+                                        <a className={classes.contactUsButton} href="mailto:"><ErrorIcon /></a>
+                                    </Fab>
+                                </Tooltip>
                             </div>
-                            <a className={classes.contactUsButton} href="mailto:" >
-                                <MailIcon />
-                                <span style={{padding: '5px 0px 0px 5px'}}>Contact us</span>
-                            </a>
                             {
                                 isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onCalcelButtonClick={this.onCalcelButtonClick} />
                             }
@@ -404,20 +406,21 @@ class Main extends React.Component {
                             {
                                 isEditApp && <EditApp isEditApp={isEditApp} getAppData={this.getAppData} appId={appId} onCalcelButtonClick={this.onCalcelButtonClick} />
                             }
-                            <div style={{ borderTop: '1px solid white'}}>
-                            <Zoom in={true}>
-                                {
-                                    isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick} /> : <Dashboard
-                                        appId={appId}
-                                        appData={this.state.appData}
-                                        getShortcutsData={this.getShortcutsData}
-                                        handleShortcutDelete={this.handleShortcutDelete}
-                                        onEditClick={this.onEditClick}
-                                        onTableViewButtonClick={this.onTableViewButtonClick} />
-                                }
-                            </Zoom>
+                            <div style={{ borderTop: '1px solid white' }}>
+                                <Zoom in={true}>
+                                    {
+                                        isTableView ? <TableView isLogin={isLogin} isTableView={isTableView} onEditClick={this.onEditClick} isGuestUser={isGuestUser} /> : <Dashboard
+                                            appId={appId}
+                                            appData={this.state.appData}
+                                            isLogin={isLogin}
+                                            getShortcutsData={this.getShortcutsData}
+                                            handleShortcutDelete={this.handleShortcutDelete}
+                                            onEditClick={this.onEditClick}
+                                            onTableViewButtonClick={this.onTableViewButtonClick} />
+                                    }
+                                </Zoom>
                             </div>
-                        </div> : <Login onLogin={this.onLogin}/>
+                        </div> : <Login onLogin={this.onLogin} />
                     }
                 </main>
             </div>

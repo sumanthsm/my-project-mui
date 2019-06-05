@@ -49,6 +49,7 @@ class EditApp extends React.Component {
             appName: '',
             appDesc: '',
             appUrl: '',
+            appContactEmail: ''
         }
     }
 
@@ -69,7 +70,10 @@ class EditApp extends React.Component {
             this.setState({ appDesc: e.target.value });
         } else if (e.target.id === 'appUrl') {
             this.setState({ appUrl: e.target.value });
+        } else if (e.target.id === 'appContactEmail') {
+            this.setState({ appContactEmail: e.target.value });
         }
+        
     }
 
     getAppDataByID = (appId) => {
@@ -82,7 +86,8 @@ class EditApp extends React.Component {
                     appAbrv: data.appAbrv,
                     appName: data.appName,
                     appDesc: data.appDesc,
-                    appUrl: data.appUrl
+                    appUrl: data.appUrl,
+                    appContactEmail : data.appContactEmail
                 })
             })
             .catch(function (error) {
@@ -109,6 +114,7 @@ class EditApp extends React.Component {
                         appName: '',
                         appDesc: '',
                         appUrl: '',
+                        appContactEmail: ''
                     })
                 } else if (response.data.status === 'fail') {
                     Swal.fire({
@@ -132,6 +138,8 @@ class EditApp extends React.Component {
         appObj['appName'] = this.state.appName;
         appObj['appDesc'] = this.state.appDesc;
         appObj['appUrl'] = this.state.appUrl;
+        appObj['appContactEmail'] = this.state.appContactEmail;
+        
         this.updateAppData(appObj);
         setTimeout(() => {
             this.props.getAppData();
@@ -144,7 +152,7 @@ class EditApp extends React.Component {
 
     render() {
         const { classes, isEditApp } = this.props;
-        const { appId, appName, appAbrv, appUrl, appDesc} = this.state;
+        const { appId, appName, appAbrv, appUrl, appDesc, appContactEmail} = this.state;
         const racf = localStorage.getItem('racf');
         const fullName = localStorage.getItem('fullName');
         return (
@@ -273,8 +281,8 @@ class EditApp extends React.Component {
                                         />
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', width: '100%' }}>
-                                    <div style={{margin: '20px 30px', width: '100%'}}>
+                                <div style={{ display: 'flex'}}>
+                                    <div style={{margin: '20px 30px'}}>
                                         <div>
                                             <label htmlFor="appDesc" style={{ textAlign: 'left' }}>App Description</label>
                                         </div>
@@ -286,10 +294,29 @@ class EditApp extends React.Component {
                                                 backgroundColor: 'lightgrey',
                                                 borderRadius: '5px',
                                                 alignItems: 'left',
-                                                padding: '0 10px'
+                                                padding: '0 10px',
+                                                width: '750px'
                                             }}
                                             onChange={this.handleChange}
-                                            fullWidth={true}
+                                        />
+                                    </div>
+                                    <div style={{margin: '20px 30px'}}>
+                                        <div>
+                                            <label htmlFor="appContactEmail" style={{ textAlign: 'left' }}>App Contact Email</label>
+                                        </div>
+                                        <InputBase
+                                            id="appContactEmail"
+                                            value={appContactEmail}
+                                            variant="outlined"
+                                            style={{
+                                                backgroundColor: 'lightgrey',
+                                                borderRadius: '5px',
+                                                width: '310px',
+                                                alignItems: 'left',
+                                                padding: '0 10px'
+                                            }}
+                                            disabled
+                                            onChange={this.handleChange}
                                         />
                                     </div>
                                 </div>

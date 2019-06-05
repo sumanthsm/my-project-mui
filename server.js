@@ -73,7 +73,7 @@ app.get('/api/getappdata:id', (req, res) => {
 });
 
 app.post('/api/shortcutsdata', (req, res) => {
-    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
+    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl', 'appContactEmail'];
     const opts = { fields };
 
     let appData = convertAppDataToJson();
@@ -109,7 +109,7 @@ app.post('/api/shortcutsdata', (req, res) => {
 });
 
 app.post('/api/deleteshortcut', (req, res) => {
-    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
+    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl', 'appContactEmail'];
     const opts = { fields };
     let shortcutsData = convertShortcutsDataToJson();
     const appId = req.body.appId;
@@ -132,7 +132,7 @@ app.post('/api/deleteshortcut', (req, res) => {
 });
 
 app.post('/api/deleteapp', (req, res) => {
-    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
+    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl', 'appContactEmail'];
     const opts = { fields };
     let appData = convertAppDataToJson();
     const appId = req.body.appId;
@@ -148,7 +148,7 @@ app.post('/api/deleteapp', (req, res) => {
 });
 
 app.post('/api/createapp', (req, res) => {
-    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
+    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl', 'appContactEmail'];
     const opts = { fields };
     let flag = 0;
     let appData = convertAppDataToJson();
@@ -179,7 +179,7 @@ app.post('/api/createapp', (req, res) => {
 
 
 app.post('/api/editapp', (req, res) => {
-    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
+    const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl', 'appContactEmail'];
     const opts = { fields };
     let appData = convertAppDataToJson();
     const newAppData = req.body.data;
@@ -193,6 +193,7 @@ app.post('/api/editapp', (req, res) => {
             appData[i]['appName'] = newAppData['appName'];
             appData[i]['appDesc'] = newAppData['appDesc'];
             appData[i]['appUrl'] = newAppData['appUrl'];
+            appData[i]['appContactEmail'] = newAppData['appContactEmail'];
             console.log(i, "inside if");
             break;
         }
