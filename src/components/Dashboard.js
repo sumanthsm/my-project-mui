@@ -52,10 +52,13 @@ const styles = theme => ({
 class Dashboard extends React.Component {
     constructor(props){
       super(props);
+      this.state = {
+        shortcutsData : null
+      }
     }
 
     componentDidMount(){
-
+      this.getShortcutsData();
     } 
 
     handleEditApp = (appId) => {
@@ -68,6 +71,10 @@ class Dashboard extends React.Component {
       axios.post('http://localhost:5000/api/shortcutsdata', { appId: appId })
           .then((response) => {
               if (response.data.status === 'success') {
+                  this.getShortcutsData();
+                  setTimeout(()=>{
+                    this.props.getShortcutsData();
+                  }, 500);
                   Swal.fire({
                       type: 'success',
                       title: 'Shortcut added Successfully.',
@@ -87,11 +94,48 @@ class Dashboard extends React.Component {
           });
     }
 
-    onFavButtonClick = (appId) => {
-      this.handleShortcut(appId);
+    getShortcutsData = () => {
+      axios.get('http://localhost:5000/api/shortcutsdata')
+          .then((response) => {
+              let data = response.data;
+              console.log(data, "shortcuts data");
+              setTimeout(()=>{
+                this.setState({ shortcutsData: data });
+              }, 1000);
+          })
+          .catch(function (error) {
+              console.log(error);
+          });
+    }
+
+    handleShortcutDelete = (appId) => {
+      this.props.handleShortcutDelete(appId);
       setTimeout(() => {
-        this.props.shortcutsData();
-    }, 2000);
+        this.getShortcutsData();
+      }, 500);
+      
+      // console.log("handleShortcutDelete");
+      // console.log(this.props.shortcutsData, "this.props.shortcutsData");
+      // setTimeout(() => {
+      //   console.log(this.props.shortcutsData, "this.props.shortcutsData");
+      //   this.setState({shortcutsData: this.props.shortcutsData})
+      // }, 2000);
+    }
+
+    onFavButtonClick = (appId) => {
+      const { shortcutsData } = this.state;
+      let flag = false;
+      for (let i = 0; i < shortcutsData.length; i++) {
+        if (appId === shortcutsData[i].appId) {
+          flag = true;
+          break;
+        }
+      }
+      if (flag) {
+        this.handleShortcutDelete(appId);
+      } else {
+        this.handleShortcut(appId);
+      }
     }
 
     onTableViewClick = () => {
@@ -100,7 +144,8 @@ class Dashboard extends React.Component {
 
     render(){
         const { classes, appId, appData } = this.props;
-        console.log(appId, "appID Dashboard");
+        const { shortcutsData } = this.state;
+        console.log(shortcutsData ,"dash board");
         
         return (
             <div>
@@ -114,11 +159,9 @@ class Dashboard extends React.Component {
                   elevation={4}
                   className={classes.paper}
                   style={{
+                    marginTop: '10px',
                     backgroundImage: (() => {
-                      console.log("bg image");
-                      
                       if (appId === app.appId) {
-                        console.log("app clicked");
                         return 'radial-gradient(circle, white, #ebebe0, #ebebe0)';
                       } else {
                         return 'radial-gradient(circle, white, #4ddbff, #00ccff)';
@@ -142,7 +185,25 @@ class Dashboard extends React.Component {
                             </div>
                         </div>
                         <div>
-                        <FavoriteIcon style={{color: 'white', cursor: 'pointer' }} onClick={() => this.onFavButtonClick(app.appId)}/>
+                        <FavoriteIcon 
+                        style={{
+                          cursor: 'pointer',
+                          color: (() => {
+                            let color = 'white';
+                            if(shortcutsData){
+                            for(let i=0; i< shortcutsData.length;i++){
+                              if(shortcutsData[i].appId === app.appId){
+                                color = '#f50057';
+                                break; 
+                              }else{
+                                color = 'white'
+                              }
+                            }
+                          }
+                          return color;
+                          })()
+                        }} 
+                            onClick={() => this.onFavButtonClick(app.appId)}/>
                         </div>
                     </div>
                 </Paper>

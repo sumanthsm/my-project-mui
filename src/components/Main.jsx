@@ -18,8 +18,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
+import MailIcon from '@material-ui/icons/Mail';
 import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import Zoom from '@material-ui/core/Zoom';
 import Dashboard from './Dashboard';
 import AddNewApp from './AddNewApp';
@@ -133,6 +135,18 @@ const styles = theme => ({
         top: '75px',
         right: theme.spacing(2),
     },
+    contactUsButton: {
+        display: 'inline-flex',
+        position: 'fixed',
+        textDecoration: 'none',
+        right: '-45px',
+        transform: 'rotate(270deg)',
+        top: '30%',
+        padding: '3px 10px 5px',
+        color: 'rgb(68, 68, 68)',
+        border: '1px solid black',
+        borderRadius: '10px 10px 0px 0px',
+    }
 });
 
 class Main extends React.Component {
@@ -168,8 +182,6 @@ class Main extends React.Component {
     }
 
     getShortcutsData = () => {
-        console.log("getShortcutsData");
-
         axios.get('http://localhost:5000/api/shortcutsdata')
             .then((response) => {
                 let data = response.data;
@@ -210,25 +222,20 @@ class Main extends React.Component {
         }
     }
 
-    handleDelete = (appId) => {
+    handleShortcutDelete = (appId) => {
+        console.log("handleShortcutDelete");
+        
         axios.post('http://localhost:5000/api/deleteshortcut', { appId: appId })
             .then((response) => {
                 if (response.data.status === 'success') {
                     this.getShortcutsData();
-                    // Swal.fire({
-                    //     type: 'success',
-                    //     title: 'Shortcut added Successfully.',
-                    //     showConfirmButton: false,
-                    //     timer: 1500
-                    // })
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Shortcut Deleted Successfully.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
-                // else {
-                //     Swal.fire({
-                //         type: 'error',
-                //         title: 'Oops...',
-                //         text: 'Shortcut already exists.',
-                //     })
-                // }
             })
             .catch(function (error) {
                 console.log(error);
@@ -363,7 +370,7 @@ class Main extends React.Component {
                     <Divider />
                     <List>
                         {
-                            shortcutsData.map((shortcut, i) => {
+                            shortcutsData && shortcutsData.map((shortcut, i) => {
                                 return (
                                     <ListItem button key={i}>
                                         <ListItemText style={{ color: 'white' }}>
@@ -386,6 +393,10 @@ class Main extends React.Component {
                                     <AddIcon onClick={this.onAddButtonClick} />
                                 </Fab>
                             </div>
+                            <a className={classes.contactUsButton} href="mailto:" >
+                                <MailIcon />
+                                <span style={{padding: '5px 0px 0px 5px'}}>Contact us</span>
+                            </a>
                             {
                                 isAddApp && <AddNewApp isAddApp={isAddApp} getAppData={this.getAppData} onCalcelButtonClick={this.onCalcelButtonClick} />
                             }
@@ -399,7 +410,8 @@ class Main extends React.Component {
                                     isTableView ? <TableView isTableView={isTableView} onEditClick={this.onEditClick} /> : <Dashboard
                                         appId={appId}
                                         appData={this.state.appData}
-                                        shortcutsData={this.getShortcutsData}
+                                        getShortcutsData={this.getShortcutsData}
+                                        handleShortcutDelete={this.handleShortcutDelete}
                                         onEditClick={this.onEditClick}
                                         onTableViewButtonClick={this.onTableViewButtonClick} />
                                 }

@@ -48,8 +48,10 @@ app.get('/api/appdata:name', (req, res) => {
     let result = [];
     let appData = convertAppDataToJson();
     for (let i = 0; i < appData.length; i++) {
-        let appName = appData[i]['appName'];
-        if (appName.indexOf(req.params.name) > -1) {
+        let appName = appData[i]['appName'].toLowerCase();
+        let appAbrv = appData[i]['appAbrv'].toLowerCase();
+        let searchTerm = req.params.name;
+        if (appName.indexOf(searchTerm.toLowerCase()) > -1 || appAbrv.indexOf(searchTerm.toLowerCase()) > -1) {
             result.push(appData[i]);
         }
     }
@@ -73,22 +75,26 @@ app.get('/api/getappdata:id', (req, res) => {
 app.post('/api/shortcutsdata', (req, res) => {
     const fields = ['appId', 'appAbrv', 'appName', 'appDesc', 'appUrl'];
     const opts = { fields };
+
     let appData = convertAppDataToJson();
     let shortcutsData = convertShortcutsDataToJson();
     const appId = req.body.appId;
     let flag = false;
-    
-    for(let i = 0; i < shortcutsData.length; i++){
-        if(shortcutsData[i].appId === appId){
-            flag = true;
-        }
+    if(shortcutsData){
+        flag = false;
+    }else{
+        for(let i = 0; i < shortcutsData.length; i++){
+            if(shortcutsData[i].appId === appId){
+                flag = true;
+            }
+        }   
     }
 
-    if(flag) {
-        res.json({ 'status' : 'fail', 'msg' : 'Data already exists'});
+    if (flag) {
+        res.json({ 'status': 'fail', 'msg': 'Data already exists' });
     } else {
-        for(let i = 0; i < appData.length; i++){
-            if(appData[i].appId=== appId){
+        for (let i = 0; i < appData.length; i++) {
+            if (appData[i].appId === appId) {
                 shortcutsData.push(appData[i]);
             }
         }
@@ -98,7 +104,7 @@ app.post('/api/shortcutsdata', (req, res) => {
                 throw err;
             }
         });
-        res.json({'status': 'success', 'msg' : 'Data added successfully'});
+        res.json({ 'status': 'success', 'msg': 'Data added successfully' });
     }
 });
 
@@ -107,6 +113,8 @@ app.post('/api/deleteshortcut', (req, res) => {
     const opts = { fields };
     let shortcutsData = convertShortcutsDataToJson();
     const appId = req.body.appId;
+    console.log(appId, "appId");
+    
     const result = shortcutsData.filter((shortcut) => shortcut.appId !== appId);
     // for(let i = 0; i < shortcutsData.length; i++){
     //     if(shortcutsData[i].appId === appId){

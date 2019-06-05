@@ -209,6 +209,9 @@ class AddNewApp extends React.Component {
                                             style={{
                                                 width: '250px'
                                             }}
+                                            inputProps={{
+                                                maxLength: 3
+                                              }}
                                             onChange={this.handleChange}
                                         />
                                     </div>

@@ -241,6 +241,9 @@ class EditApp extends React.Component {
                                             id="appAbrv"
                                             value={appAbrv}
                                             variant="outlined"
+                                            inputProps={{
+                                                maxLength: 3
+                                              }}
                                             style={{
                                                 backgroundColor: 'lightgrey',
                                                 borderRadius: '5px',
