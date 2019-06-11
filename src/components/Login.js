@@ -7,6 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import userData from '../userdata.json';
 
 const styles = theme => ({
     root: {
@@ -62,16 +63,33 @@ class EditApp extends React.Component {
     handleSubmmit = () => {
         const { racf, fullName } = this.state;
         if(racf !== '' && fullName !== ''){
-            localStorage.setItem('racf', racf);
-            localStorage.setItem('fullName', fullName);
-            localStorage.setItem('login', true);
-            this.props.onLogin();
-            Swal.fire({
-                type: 'success',
-                title: 'Login Successful!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            const data = userData.data;
+            let flag = false;
+            for(let i=0;i<data.length;i++){
+                if(data[i].racf === racf && data[i].fullName === fullName){
+                    localStorage.setItem('racf', racf);
+                    localStorage.setItem('fullName', fullName);
+                    localStorage.setItem('login', true);
+                    flag = true;
+                    this.props.onLogin();
+                    break;
+                }
+            }
+            if(flag){
+                Swal.fire({
+                    type: 'success',
+                    title: 'Login Successful!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+            else{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Please enter valid RACF and Full Name',
+                })
+            }
         }else {
             Swal.fire({
                 type: 'error',

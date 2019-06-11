@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "racf" : "123",
+            "fullName": "user1"
+        },
+        {
+            "racf" : "124",
+            "fullName": "user2"
+        },
+        {
+            "racf" : "125",
+            "fullName": "user3"
+        },
+        {
+            "racf" : "126",
+            "fullName": "user4"
+        },
+        {
+            "racf" : "234",
+            "fullName": "user5"
+        },
+        {
+            "racf" : "152",
+            "fullName": "user6"
+        }
+    ]
+}
