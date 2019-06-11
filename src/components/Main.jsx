@@ -420,7 +420,7 @@ class Main extends React.Component {
                                     }
                                 </Zoom>
                             </div>
-                        </div> : <Login onLogin={this.onLogin} />
+                        </div> : <Login onLogin={this.onLogin} guestUser={this.onHomeButtonClick}/>
                     }
                 </main>
             </div>

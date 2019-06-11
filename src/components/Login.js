@@ -103,6 +103,11 @@ class EditApp extends React.Component {
         this.props.onButtonClick();
     }
 
+    handleGuestLogin = (e) => {
+        e.preventDefault();
+        this.props.guestUser();
+    }
+
     render() {
         const { classes } = this.props;
         const { racf, fullName } = this.state;
@@ -152,7 +157,7 @@ class EditApp extends React.Component {
                                     </div>
                                 </div>
                                 <div style={{ width: '100%' }}>
-                                    <div style={{margin: '30px 10px 50px 0px', float: 'right'}}>
+                                    <div style={{margin: '30px 10px 30px 0px', float: 'right'}}>
                                         <Button 
                                             variant="outlined" 
                                             style={{margin: '0px 20px', backgroundColor: '#00b3b3', color: 'white'}}
@@ -161,6 +166,9 @@ class EditApp extends React.Component {
                                         <span style={{padding: '3px 12px'}}>SIGN IN</span>    
                                         </Button>
                                     </div>
+                                </div>
+                                <div style={{ width: '100%', textAlign: 'center', marginBottom: '15px'}}>
+                                    <a href="#" style={{color: 'black'}} onClick={this.handleGuestLogin}>Login as a Guest user</a>
                                 </div>
                             </form>
                         </Paper>
